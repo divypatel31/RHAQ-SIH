@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, ActivityIndicator, View } from "react-native";
 import { useTranslation } from "react-i18next";
+import * as Speech from "expo-speech";
 import { synthesizeSpeech, isBhashiniConfigured } from "../services/bhashiniService";
 import { playBase64Audio } from "../services/audioPlayer";
 import { COLORS } from "../config";
 
-/**
- * A "🔊 Read aloud" button for any freeform text (a referral reason, a
- * high-risk condition note, etc.). Speaks it in the app's current
- * language via Bhashini, translating first if `sourceLang` differs from
- * the current language. Degrades to a clear, non-crashing message if
- * Bhashini credentials aren't configured yet, rather than failing silently.
- */
 export default function ReadAloudButton({ text, sourceLang = "en", compact = false }) {
   const { i18n, t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -20,14 +14,23 @@ export default function ReadAloudButton({ text, sourceLang = "en", compact = fal
 
   async function handlePress() {
     setError("");
-    if (!isBhashiniConfigured()) {
-      setError(t("common.readAloudError"));
-      return;
-    }
     setLoading(true);
+
     try {
-      const audio = await synthesizeSpeech(text, targetLang, sourceLang);
-      await playBase64Audio(audio);
+      // If Bhashini API keys are configured, use Bhashini's professional AI pipeline
+      if (isBhashiniConfigured()) {
+        const audio = await synthesizeSpeech(text, targetLang, sourceLang);
+        await playBase64Audio(audio);
+      } else {
+        // Fallback: Use built-in offline device speech (No API key needed!)
+        const options = {
+          language: targetLang === "hi" ? "hi-IN" : targetLang === "mr" ? "mr-IN" : "en-US",
+          pitch: 1.0,
+          rate: 0.9,
+        };
+        
+        Speech.speak(text, options);
+      }
     } catch (err) {
       setError(err.message || "Couldn't read this aloud right now.");
     } finally {
@@ -56,7 +59,9 @@ export default function ReadAloudButton({ text, sourceLang = "en", compact = fal
         {loading ? (
           <ActivityIndicator size="small" color={COLORS.primary} />
         ) : (
-          <Text style={{ fontSize: compact ? 13 : 14, color: COLORS.primary, fontWeight: "700" }}>{t("common.readAloud")}</Text>
+          <Text style={{ fontSize: compact ? 13 : 14, color: COLORS.primary, fontWeight: "700" }}>
+            {t("common.readAloud")}
+          </Text>
         )}
       </TouchableOpacity>
       {error ? (

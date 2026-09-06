@@ -1,20 +1,16 @@
-// Point this at your deployed backend, or your machine's LAN IP when
-// testing on a physical device via Expo Go (localhost won't resolve
-// from a phone on the same network — use e.g. http://192.168.1.5:5000/api).
-export const API_BASE_URL = "http://localhost:5000/api";
+// asha-app/src/config.js
 
-// Bhashini (bhashini.gov.in) credentials for voice read-aloud (see
-// src/services/bhashiniService.js). Register at
-// https://bhashini.gov.in/ulca/user/register to get these — they are
-// free but require signup. Leave blank to disable the read-aloud
-// feature gracefully (ReadAloudButton shows a helpful message instead
-// of crashing when these are empty).
-export const BHASHINI_USER_ID = "";
-export const BHASHINI_API_KEY = "";
-// Public pipeline ID commonly used for the standard ASR/NMT/TTS pipeline
-// as of this writing — Bhashini may rotate this; check their docs if
-// pipeline requests start failing with a "pipeline not found" error.
-export const BHASHINI_PIPELINE_ID = "64392f96daac500b55c543cd";
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
+
+export const BHASHINI_USER_ID =
+  process.env.EXPO_PUBLIC_BHASHINI_USER_ID || "";
+
+export const BHASHINI_API_KEY =
+  process.env.EXPO_PUBLIC_BHASHINI_API_KEY || "";
+
+export const BHASHINI_PIPELINE_ID =
+  process.env.EXPO_PUBLIC_BHASHINI_PIPELINE_ID || "64392f96daac500b55c543cd";
 
 export const COLORS = {
   primary: "#0F6E56",

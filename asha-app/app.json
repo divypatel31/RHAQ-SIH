@@ -9,7 +9,9 @@
     "splash": {
       "backgroundColor": "#0F6E56"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "dev.rhaq.ashaapp",
       "adaptiveIcon": {
@@ -19,6 +21,9 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "dev.rhaq.ashaapp"
-    }
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
   }
 }
