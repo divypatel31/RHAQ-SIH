@@ -5,6 +5,8 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const facilityRoutes = require("./routes/facilityRoutes");
 const patientRoutes = require("./routes/patientRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
+const prescriptionRoutes = require("./routes/prescriptionRoutes");
 const referralRoutes = require("./routes/referralRoutes");
 const highRiskRoutes = require("./routes/highRiskRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
@@ -24,6 +26,8 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/facilities", facilityRoutes);
 app.use("/api/patients", patientRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/referrals", referralRoutes);
 app.use("/api/high-risk", highRiskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
