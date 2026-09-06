@@ -20,29 +20,29 @@ This repo is a **fresh rebuild**, split cleanly into two front-ends sharing one 
 ## 🏗️ Architecture
 
 ```
-        ┌─────────────────┐        ┌──────────────────┐
-        │     Website      │        │     ASHA App      │
-        │ (patient/PHC/    │        │ (mobile, offline- │
-        │  hospital staff) │        │  first)            │
-        └────────┬─────────┘        └─────────┬─────────┘
-                 │ REST API (HTTPS/JWT)         │ REST API + offline queue
-                 └───────────────┬──────────────┘
-                                  ▼
-                     ┌────────────────────────┐
+        ┌──────────────────┐            ┌───────────────────┐
+        │     Website      │            │     ASHA App      │
+        │ (patient/PHC/    │            │ (mobile, offline- │
+        │  hospital staff) │            │  first)           │
+        └────────┬─────────┘            └─────────┬─────────┘
+                 │ REST API (HTTPS/JWT)           │ REST API + offline queue
+                 └───────────────┬────────────────┘
+                                 ▼
+                     ┌──────────────────────────┐
                      │   Backend (Node/Express) │
-                     │  facilities · referrals   │
-                     │  high-risk · dashboard     │
-                     │  emergency · auth · sync   │
-                     └────────────┬───────────┘
+                     │  facilities · referrals  │
+                     │  high-risk · dashboard   │
+                     │  emergency · auth · sync │
+                     └────────────┬─────────────┘
                                   ▼
                      ┌────────────────────────┐
-                     │    PostgreSQL database   │
+                     │    PostgreSQL database │
                      └────────────────────────┘
 ```
 
 ---
 
-## 🎯 Why this shape (read before building)
+## 🎯 Why this shape 
 
 The core problem PS133 asks us to solve isn't "build a telemedicine app" — it's **continuity of care across a health system that most teams treat as a single hospital**. Two things follow from that:
 
@@ -109,9 +109,6 @@ rural-health-access/
     └── db-schema.md                   ← table-by-table schema reference
 ```
 
-> Empty folders above are committed with a `.gitkeep` placeholder so the structure exists in git before any code is written — delete the `.gitkeep` in a folder as soon as you add a real file to it.
-
----
 
 ## 🚀 How to start (in order)
 
@@ -132,17 +129,10 @@ rural-health-access/
 | Offline sync | Local SQLite queue on the app → batch sync endpoint on reconnect | Works with zero connectivity for hours |
 | Auth | JWT, bcrypt password hashing | Shared across both front-ends |
 
-> If you'd rather build the ASHA app as an installable **PWA** instead of React Native, that also works and is faster to ship — see the note in `asha-app/README.md`. Pick one before you start; don't build both.
+
 
 ---
 
-## 👥 Adding a contributor
-
-1. GitHub repo → **Settings → Collaborators** → **Add people** → enter your friend's GitHub username/email → send invite.
-2. Your friend accepts the invite via the email/GitHub notification.
-3. Agree on branch naming and PR flow in `CONTRIBUTING.md` before either of you starts pushing code.
-
----
 
 ## 📌 Current Status
 
@@ -153,7 +143,7 @@ rural-health-access/
 - [x] ASHA app — patient search by name/phone (replaces raw ID entry), verified against a live `/patients/search` endpoint
 - [x] ASHA app — High-Risk Follow-ups screen (due/overdue worklist, log contact, close), verified against live backend
 - [x] ASHA app — language toggle (English/Hindi/Marathi), fully translated, persisted across restarts
-- [x] ASHA app — Bhashini voice read-aloud integrated in code — **not yet verified against the live Bhashini API** (no credentials/network access available while building); needs a real test pass before demo day
+- [x] ASHA app — Bhashini voice read-aloud integrated in code — **not yet verified against the live Bhashini API**
 - [ ] Website — facility dashboard working
 - [ ] Website — referral tracking view working
 - [ ] End-to-end demo: referral created on ASHA app → visible and updatable on website
@@ -161,4 +151,4 @@ rural-health-access/
 ---
 
 ## 📄 License
-Add your team's chosen license here (MIT is a safe default for a hackathon project).
+MIT
