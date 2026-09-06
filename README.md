@@ -143,10 +143,11 @@ rural-health-access/
 - [x] ASHA app — patient search by name/phone (replaces raw ID entry), verified against a live `/patients/search` endpoint
 - [x] ASHA app — High-Risk Follow-ups screen (due/overdue worklist, log contact, close), verified against live backend
 - [x] ASHA app — language toggle (English/Hindi/Marathi), fully translated, persisted across restarts
-- [x] ASHA app — Bhashini voice read-aloud integrated in code — **not yet verified against the live Bhashini API**
-- [ ] Website — facility dashboard working
-- [ ] Website — referral tracking view working
-- [ ] End-to-end demo: referral created on ASHA app → visible and updatable on website
+- [x] ASHA app — Bhashini voice read-aloud integrated in code — **not yet verified against the live Bhashini API** (no credentials/network access available while building); needs a real test pass before demo day
+- [x] Website — facility dashboard working — verified against the live district dashboard endpoint
+- [x] Website — referral tracking view working — create, advance status, mark missed, all verified against the live backend
+- [x] Website — patient portal (book appointment, view/cancel appointments, view prescriptions) — verified live end-to-end, including a real backend gap found and fixed (no appointments/prescriptions API existed until this pass)
+- [ ] End-to-end demo: referral created on ASHA app → visible and updatable on website — both sides are individually verified against the same backend; a literal side-by-side demo run hasn't been done yet
 
 ---
 

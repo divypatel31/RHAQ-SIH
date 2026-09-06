@@ -55,26 +55,26 @@ Legend: **P0** = must work for the demo, **P1** = strengthens the pitch, **P2** 
 ## 3. Website (patient / PHC / hospital staff)
 
 ### P0 — Core
-- [ ] Login, role-based dashboard routing
-- [ ] Facility staff: view and update referrals sent to/from their facility
-- [ ] Facility staff: view high-risk follow-up worklist for their facility
-- [ ] Patient: book appointment, view own appointments/prescriptions
+- [x] Login, role-based dashboard routing
+- [x] Facility staff: view and update referrals sent to/from their facility
+- [x] Facility staff: view high-risk follow-up worklist for their facility
+- [x] Patient: book appointment, view own appointments/prescriptions
 
 ### P1 — Strengthens the pitch
-- [ ] Facility/district dashboard: referral completion rate, high-risk backlog, low stock, facility activity
-- [ ] Emergency escalations view with status updates
+- [x] Facility/district dashboard: referral completion rate, high-risk backlog, low stock, facility activity
+- [x] Emergency escalations view with status updates
 - [ ] Admin: manage facilities, users
-- [ ] Cross-facility medicine availability search
+- [ ] Cross-facility medicine availability search — backend endpoint exists (`GET /facilities/medicine-search`), no UI yet
 
 ### P2 — Stretch
 - [ ] AI symptom triage chat + auto-booking
 - [ ] Lab request/result workflow
 - [ ] Pharmacy dispensing (FIFO batching)
-- [ ] Multilingual UI (English/Hindi)
+- [ ] Multilingual UI (English/Hindi) — done on the ASHA app (+Marathi); not yet ported to the website
 
 ---
 
-## Suggested build order (both people working in parallel)
+## Suggested build order 
 
 1. Agree on `API_CONTRACT.md` and `docs/db-schema.md` — do this together before writing code.
 2. Backend: auth + facilities + referrals (P0) — get this deployed somewhere reachable (even a free-tier host) so both apps can hit real endpoints instead of mocks.

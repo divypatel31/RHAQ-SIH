@@ -41,6 +41,54 @@ Returns the chain from the given facility up to district level. Used by referral
 
 ---
 
+## Appointments
+
+### `POST /appointments`
+```json
+// request (patient role: patient_id is inferred from the token, no need to send it)
+{ "facility_id": 4, "doctor_id": 12, "appointment_date": "2026-09-15", "is_teleconsult": false }
+// response 201
+{ "message": "Appointment booked", "appointment_id": 1 }
+```
+
+### `GET /appointments?facility_id=&status=`
+A patient token only ever returns their own appointments regardless of query params; facility staff can filter by facility/status.
+```json
+{ "appointments": [
+  { "appointment_id": 1, "patient_id": 35, "patient_name": "Geeta Kumari", "facility_id": 4,
+    "facility_name": "Sub-Centre - Village X", "doctor_id": null, "doctor_name": null,
+    "appointment_date": "2026-09-15T00:00:00.000Z", "is_teleconsult": false, "status": "scheduled" }
+]}
+```
+
+### `PATCH /appointments/:id/status`
+```json
+{ "status": "cancelled" }  // scheduled | completed | cancelled
+```
+
+---
+
+## Prescriptions
+
+### `POST /prescriptions`
+Restricted to `doctor`, `receptionist`, `admin` roles.
+```json
+{ "patient_id": 35, "facility_id": 4, "appointment_id": 1, "medicines": "Paracetamol 500mg - 1 tab twice daily x 5 days", "notes": "Take after food" }
+// response 201
+{ "message": "Prescription issued", "prescription_id": 1 }
+```
+
+### `GET /prescriptions?patient_id=`
+A patient token only ever returns their own prescriptions.
+```json
+{ "prescriptions": [
+  { "prescription_id": 1, "patient_id": 35, "medicines": "Paracetamol 500mg ...", "notes": "Take after food",
+    "facility_name": "Sub-Centre - Village X", "issued_by_name": "Dr. Anil Sharma", "created_at": "2026-09-06T12:47:07.102Z" }
+]}
+```
+
+---
+
 ## Patients
 
 ### `GET /patients/search?query=&facility_id=`
