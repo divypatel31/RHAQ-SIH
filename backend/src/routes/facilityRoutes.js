@@ -8,5 +8,6 @@ router.get("/medicine-search", verifyToken, facilityController.searchMedicineAcr
 router.get("/:id/hierarchy", verifyToken, facilityController.getFacilityHierarchy);
 router.get("/:id/medicine-stock", verifyToken, facilityController.getFacilityMedicineStock);
 router.post("/", verifyToken, requireRole("admin"), facilityController.createFacility);
+router.patch("/:id", verifyToken, requireRole("admin"), facilityController.updateFacility);
 
 module.exports = router;

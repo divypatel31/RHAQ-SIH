@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const facilityRoutes = require("./routes/facilityRoutes");
 const patientRoutes = require("./routes/patientRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
@@ -24,6 +25,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/facilities", facilityRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/appointments", appointmentRoutes);

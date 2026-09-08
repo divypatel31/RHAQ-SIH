@@ -82,6 +82,51 @@ exports.createFacility = async (req, res) => {
   }
 };
 
+// PATCH /facilities/:id (admin only)
+exports.updateFacility = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name, tier, parent_facility_id, district, block,
+      village_or_area, contact_phone, has_diagnostics, has_teleconsult_kiosk,
+    } = req.body;
+
+    const existing = await db.query("SELECT * FROM facilities WHERE facility_id = $1", [id]);
+    if (existing.rows.length === 0) {
+      return res.status(404).json({ message: "Facility not found" });
+    }
+    const current = existing.rows[0];
+
+    if (parent_facility_id && Number(parent_facility_id) === Number(id)) {
+      return res.status(400).json({ message: "A facility cannot be its own parent" });
+    }
+
+    await db.query(
+      `UPDATE facilities SET
+        name = $1, tier = $2, parent_facility_id = $3, district = $4, block = $5,
+        village_or_area = $6, contact_phone = $7, has_diagnostics = $8, has_teleconsult_kiosk = $9
+       WHERE facility_id = $10`,
+      [
+        name ?? current.name,
+        tier ?? current.tier,
+        parent_facility_id !== undefined ? (parent_facility_id || null) : current.parent_facility_id,
+        district ?? current.district,
+        block !== undefined ? block : current.block,
+        village_or_area !== undefined ? village_or_area : current.village_or_area,
+        contact_phone !== undefined ? contact_phone : current.contact_phone,
+        has_diagnostics !== undefined ? !!has_diagnostics : current.has_diagnostics,
+        has_teleconsult_kiosk !== undefined ? !!has_teleconsult_kiosk : current.has_teleconsult_kiosk,
+        id,
+      ]
+    );
+
+    res.status(200).json({ message: "Facility updated" });
+  } catch (error) {
+    console.error("updateFacility error:", error);
+    res.status(500).json({ message: "Failed to update facility" });
+  }
+};
+
 // GET /facilities/:id/medicine-stock
 exports.getFacilityMedicineStock = async (req, res) => {
   try {
