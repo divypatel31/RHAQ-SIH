@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export function PageHeader({ title, subtitle, action }) {
   return (
@@ -33,38 +34,39 @@ export function EmptyState({ title, description }) {
 // this is a structural device tied to real referral/follow-up state, used
 // consistently everywhere a status appears so it reads as one language.
 const STATUS_TOKENS = {
-  referred: { border: "border-teal-500", text: "text-teal-600", label: "Referred" },
-  travel_in_progress: { border: "border-teal-400", text: "text-teal-500", label: "Travelling" },
-  arrived: { border: "border-amber-500", text: "text-amber-500", label: "Arrived" },
-  seen: { border: "border-amber-500", text: "text-amber-500", label: "Seen" },
-  completed: { border: "border-teal-600", text: "text-teal-600", label: "Completed" },
-  missed: { border: "border-rose-500", text: "text-rose-500", label: "Missed" },
+  referred: { border: "border-teal-500", text: "text-teal-600" },
+  travel_in_progress: { border: "border-teal-400", text: "text-teal-500" },
+  arrived: { border: "border-amber-500", text: "text-amber-500" },
+  seen: { border: "border-amber-500", text: "text-amber-500" },
+  completed: { border: "border-teal-600", text: "text-teal-600" },
+  missed: { border: "border-rose-500", text: "text-rose-500" },
 
-  on_track: { border: "border-teal-500", text: "text-teal-600", label: "On track" },
-  due: { border: "border-amber-500", text: "text-amber-500", label: "Due" },
-  overdue: { border: "border-clay-500", text: "text-clay-500", label: "Overdue" },
-  closed: { border: "border-line", text: "text-ink/40", label: "Closed" },
+  on_track: { border: "border-teal-500", text: "text-teal-600" },
+  due: { border: "border-amber-500", text: "text-amber-500" },
+  overdue: { border: "border-clay-500", text: "text-clay-500" },
+  closed: { border: "border-line", text: "text-ink/40" },
 
-  open: { border: "border-rose-500", text: "text-rose-500", label: "Open" },
-  acknowledged: { border: "border-amber-500", text: "text-amber-500", label: "Acknowledged" },
-  dispatched: { border: "border-teal-400", text: "text-teal-500", label: "Dispatched" },
-  resolved: { border: "border-teal-600", text: "text-teal-600", label: "Resolved" },
+  open: { border: "border-rose-500", text: "text-rose-500" },
+  acknowledged: { border: "border-amber-500", text: "text-amber-500" },
+  dispatched: { border: "border-teal-400", text: "text-teal-500" },
+  resolved: { border: "border-teal-600", text: "text-teal-600" },
 
-  scheduled: { border: "border-teal-500", text: "text-teal-600", label: "Scheduled" },
-  cancelled: { border: "border-line", text: "text-ink/40", label: "Cancelled" },
+  scheduled: { border: "border-teal-500", text: "text-teal-600" },
+  cancelled: { border: "border-line", text: "text-ink/40" },
 };
 
 export function StatusTag({ status }) {
-  const token = STATUS_TOKENS[status] || { border: "border-line", text: "text-ink/50", label: status };
+  const { t } = useTranslation();
+  const token = STATUS_TOKENS[status] || { border: "border-line", text: "text-ink/50" };
   return (
     <span className={`inline-flex items-center gap-1.5 pl-2.5 pr-3 py-1 text-xs font-medium border-l-2 ${token.border} ${token.text} bg-ink/[0.02]`}>
-      {token.label}
+      {t(`status.${status}`, status)}
     </span>
   );
 }
 
 export function getStatusToken(status) {
-  return STATUS_TOKENS[status] || { border: "border-line", text: "text-ink/50", label: status };
+  return STATUS_TOKENS[status] || { border: "border-line", text: "text-ink/50" };
 }
 
 export function Card({ children, className = "", accentClass = "" }) {

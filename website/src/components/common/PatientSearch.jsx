@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { Input } from "./index";
 
 export default function PatientSearch({ onSelect, selected, onClear }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export default function PatientSearch({ onSelect, selected, onClear }) {
           <p className="text-xs text-ink/50">{selected.phone}</p>
         </div>
         <button type="button" onClick={onClear} className="text-xs font-medium text-rose-500 hover:text-rose-600">
-          Change
+          {t("referrals.change")}
         </button>
       </div>
     );
@@ -44,8 +46,8 @@ export default function PatientSearch({ onSelect, selected, onClear }) {
 
   return (
     <div className="mb-4 relative">
-      <Input placeholder="Search patient by name or phone number" value={query} onChange={(e) => setQuery(e.target.value)} />
-      {loading && <p className="text-xs text-ink/40 mt-1.5">Searching…</p>}
+      <Input placeholder={t("referrals.searchPlaceholder")} value={query} onChange={(e) => setQuery(e.target.value)} />
+      {loading && <p className="text-xs text-ink/40 mt-1.5">{t("referrals.searching")}</p>}
       {results.length > 0 && (
         <div className="absolute z-10 w-full bg-white border border-line rounded-md mt-1 max-h-56 overflow-y-auto shadow-sm">
           {results.map((p) => (
@@ -66,7 +68,7 @@ export default function PatientSearch({ onSelect, selected, onClear }) {
         </div>
       )}
       {!loading && query.trim().length >= 2 && results.length === 0 && (
-        <p className="text-xs text-ink/40 mt-1.5">No matching patient found.</p>
+        <p className="text-xs text-ink/40 mt-1.5">{t("referrals.noMatch")}</p>
       )}
     </div>
   );

@@ -12,6 +12,8 @@ import ReferralTracking from "./pages/facility-staff/ReferralTracking";
 import HighRiskFollowups from "./pages/facility-staff/HighRiskFollowups";
 import FacilityDashboard from "./pages/facility-staff/FacilityDashboard";
 import EmergencyEscalations from "./pages/facility-staff/EmergencyEscalations";
+import UserManagement from "./pages/admin/UserManagement";
+import FacilityManagement from "./pages/admin/FacilityManagement";
 
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
@@ -65,6 +67,22 @@ export default function App() {
             <Route path="high-risk" element={<HighRiskFollowups />} />
             <Route path="dashboard" element={<FacilityDashboard />} />
             <Route path="emergency" element={<EmergencyEscalations />} />
+            <Route
+              path="admin/users"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="admin/facilities"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <FacilityManagement />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

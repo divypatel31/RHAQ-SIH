@@ -36,9 +36,18 @@ A facility staff account can log in, see referrals involving their facility, adv
 
 **Not yet done, being upfront about it:**
 - No actual browser click-through testing was done — this sandbox has no way to launch a real browser. Verification was: clean production build + backend endpoint parity (every request shape matches an endpoint already tested live via curl) + careful manual review, not visual/interactive testing. Open it in an actual browser and click through the flows before a demo.
-- Admin screens (manage facilities/users — P1) are not built. The task this was built for was scoped to patient and hospital staff only.
-- Multilingual UI (P2) is not built here — the ASHA app has it (English/Hindi/Marathi); porting the same `i18next` setup to this site is straightforward if there's time.
 - Cross-facility medicine availability search (P1, backend endpoint exists at `GET /facilities/medicine-search`) has no UI yet.
+- No UI yet for staff to issue a prescription (backend endpoint works and is tested — see root `README.md`'s test-account section for a curl workaround).
+
+## Admin (User & Facility Management)
+Built and verified live: `pages/admin/UserManagement.jsx` (list/filter by role, edit name/role/facility) and `pages/admin/FacilityManagement.jsx` (list, create, edit — full sub-centre/PHC/rural/district hierarchy). Both are admin-role-gated on both ends: the nav items only render for `role === 'admin'` in `DashboardLayout`, and the backend independently enforces it via `requireRole("admin")` on every endpoint — the frontend gate is a UX nicety, not the actual security boundary.
+
+Deliberately narrow scope on the backend: no hard delete for users or facilities (a user delete would cascade into their referrals/appointments/prescriptions, and a facility can't be deleted while referrals reference it — both are safety-by-default choices, not oversights), and no password reset from this endpoint (that needs its own flow that invalidates sessions).
+
+Verified live: admin lists users, edits a user's facility assignment, edits a facility's contact info, and creates a new facility — all confirmed against the real database.
+
+## Multilingual UI
+English, Hindi, and Marathi — the same three languages as the ASHA app, using the same `i18next`/`react-i18next` pattern. 162 keys, verified to have identical coverage across all three locale files (no silent gaps). Status labels (referral status, high-risk status, emergency status) are translated too, not just page chrome — `StatusTag` in `components/common/index.jsx` now resolves its label via `t('status.' + status)` instead of a hardcoded English string.
 
 ## Design notes on what was actually chosen
 Palette: deep teal (`#0F6E56`, carried over from the ASHA app and diagrams for brand consistency) as the primary action/status color, a warm clay tone reserved for urgency accents, and a cool off-white background — deliberately not the cream+terracotta or dark+neon combinations that read as generic AI-generated defaults. Typeface: IBM Plex Sans throughout (one family, weight/size used for hierarchy rather than a second display face), chosen for its institutional/technical character over a more generic choice like Inter. Status (referral status, follow-up status, emergency status) is shown as a left-border accent + label rather than a rounded pill badge — a structural device tied to real data, used identically everywhere status appears, instead of decorative color-coding.
