@@ -63,18 +63,18 @@ Legend: **P0** = must work for the demo, **P1** = strengthens the pitch, **P2** 
 ### P1 — Strengthens the pitch
 - [x] Facility/district dashboard: referral completion rate, high-risk backlog, low stock, facility activity
 - [x] Emergency escalations view with status updates
-- [ ] Admin: manage facilities, users
+- [x] Admin: manage facilities, users — list/edit users (role, facility), list/create/edit facilities, backend-enforced via requireRole("admin")
 - [ ] Cross-facility medicine availability search — backend endpoint exists (`GET /facilities/medicine-search`), no UI yet
 
 ### P2 — Stretch
 - [ ] AI symptom triage chat + auto-booking
 - [ ] Lab request/result workflow
 - [ ] Pharmacy dispensing (FIFO batching)
-- [ ] Multilingual UI (English/Hindi) — done on the ASHA app (+Marathi); not yet ported to the website
+- [x] Multilingual UI (English/Hindi) — English, Hindi, and Marathi, 162 keys with full coverage across all three, including status labels
 
 ---
 
-## Suggested build order 
+## Suggested build order (both people working in parallel)
 
 1. Agree on `API_CONTRACT.md` and `docs/db-schema.md` — do this together before writing code.
 2. Backend: auth + facilities + referrals (P0) — get this deployed somewhere reachable (even a free-tier host) so both apps can hit real endpoints instead of mocks.

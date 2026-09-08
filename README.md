@@ -133,6 +133,32 @@ rural-health-access/
 
 ---
 
+## 🔑 Test Accounts (for running the full loop)
+
+Neither the website nor the ASHA app has a staff self-signup screen (only the ASHA app registers *patients*), so you need accounts already in the database before you can log into anything. Run the seed migration to get one ready-made account per role:
+
+```bash
+psql -U <user> -d <database> -f backend/migrations/004_seed_test_users.sql
+```
+
+| Role | Phone | Password | Log in on |
+|---|---|---|---|
+| ASHA Worker | `9000000001` | `asha123` | ASHA app |
+| Doctor | `9000000002` | `doctor123` | Website |
+| Receptionist | `9000000003` | `reception123` | Website |
+| Admin | `9000000004` | `admin123` | Website (no admin screens built yet, but the account exists) |
+| Patient | `9000000005` | `patient123` | Website |
+
+All 5 logins verified live — each returns a valid token with the correct role and facility.
+
+
+### Suggested full-loop test
+1. Log into the **ASHA app** as the ASHA Worker → register a new patient (try it in airplane mode, then reconnect and watch it sync) → search for that patient → create a referral from Sub-Centre (facility 4) to Rural Hospital (facility 2).
+2. Log into the **website** as the Doctor (whose `facility_id` is 2, the referral's destination) → open Referrals → find the incoming referral → advance it through `travel_in_progress → arrived → seen → completed`.
+3. Still on the website, check the **Facility Dashboard** — the referral completion rate should reflect the one you just completed.
+4. Log into the website as the **Patient** → book an appointment → have the Doctor or Receptionist issue a prescription for that patient (via `POST /prescriptions` — no UI for this yet, see note below) → log back in as the Patient and confirm it shows up under Prescriptions.
+
+---
 
 ## 📌 Current Status
 
@@ -147,6 +173,8 @@ rural-health-access/
 - [x] Website — facility dashboard working — verified against the live district dashboard endpoint
 - [x] Website — referral tracking view working — create, advance status, mark missed, all verified against the live backend
 - [x] Website — patient portal (book appointment, view/cancel appointments, view prescriptions) — verified live end-to-end, including a real backend gap found and fixed (no appointments/prescriptions API existed until this pass)
+- [x] Website — admin screens (user management, facility management) — verified live: edited a user's facility, edited a facility, created a new facility
+- [x] Website — multilingual UI (English/Hindi/Marathi), matching the ASHA app's coverage — 162 keys, verified identical coverage across all three languages
 - [ ] End-to-end demo: referral created on ASHA app → visible and updatable on website — both sides are individually verified against the same backend; a literal side-by-side demo run hasn't been done yet
 
 ---
