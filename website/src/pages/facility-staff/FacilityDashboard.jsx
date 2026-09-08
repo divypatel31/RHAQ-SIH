@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { PageHeader, StatCard, Card, Spinner, EmptyState } from "../../components/common";
 import { titleCase } from "../../utils/helpers";
 
 export default function FacilityDashboard() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -12,24 +14,32 @@ export default function FacilityDashboard() {
   }, []);
 
   if (loading) return <Spinner />;
-  if (!data) return <EmptyState title="Couldn't load the dashboard" />;
+  if (!data) return <EmptyState title={t("dashboard.loadError")} />;
 
   const { referralStats, highRiskStats, emergencyStats, lowStock, facilityActivity } = data;
 
   return (
     <div>
-      <PageHeader title="Facility Dashboard" subtitle="Referral completion, high-risk backlog, and facility activity at a glance." />
+      <PageHeader title={t("dashboard.title")} subtitle={t("dashboard.subtitle")} />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Referral Completion" value={`${referralStats?.completion_rate_pct ?? 0}%`} sub={`${referralStats?.completed ?? 0} of ${referralStats?.total_referrals ?? 0}`} />
-        <StatCard label="Referrals In Progress" value={referralStats?.in_progress ?? 0} />
-        <StatCard label="High-Risk Backlog" value={(highRiskStats?.overdue ?? 0) + (highRiskStats?.missed ?? 0)} sub={`${highRiskStats?.due_soon ?? 0} due soon`} />
-        <StatCard label="Open Emergencies" value={emergencyStats?.open_escalations ?? 0} />
+        <StatCard
+          label={t("dashboard.referralCompletion")}
+          value={`${referralStats?.completion_rate_pct ?? 0}%`}
+          sub={`${referralStats?.completed ?? 0} of ${referralStats?.total_referrals ?? 0}`}
+        />
+        <StatCard label={t("dashboard.referralsInProgress")} value={referralStats?.in_progress ?? 0} />
+        <StatCard
+          label={t("dashboard.highRiskBacklog")}
+          value={(highRiskStats?.overdue ?? 0) + (highRiskStats?.missed ?? 0)}
+          sub={`${highRiskStats?.due_soon ?? 0} ${t("dashboard.dueSoon")}`}
+        />
+        <StatCard label={t("dashboard.openEmergencies")} value={emergencyStats?.open_escalations ?? 0} />
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-sm font-semibold text-ink mb-3">Facility Activity (30 days)</h3>
+          <h3 className="text-sm font-semibold text-ink mb-3">{t("dashboard.facilityActivity")}</h3>
           {facilityActivity?.length ? (
             <div className="space-y-2">
               {facilityActivity.map((f) => (
@@ -43,12 +53,12 @@ export default function FacilityDashboard() {
               ))}
             </div>
           ) : (
-            <EmptyState title="No activity data" />
+            <EmptyState title={t("dashboard.noActivity")} />
           )}
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-ink mb-3">Low Medicine Stock</h3>
+          <h3 className="text-sm font-semibold text-ink mb-3">{t("dashboard.lowStock")}</h3>
           {lowStock?.length ? (
             <div className="space-y-2">
               {lowStock.map((s, i) => (
@@ -62,7 +72,7 @@ export default function FacilityDashboard() {
               ))}
             </div>
           ) : (
-            <EmptyState title="No shortages" description="All tracked facilities are above threshold." />
+            <EmptyState title={t("dashboard.noShortages")} description={t("dashboard.noShortagesDescription")} />
           )}
         </div>
       </div>

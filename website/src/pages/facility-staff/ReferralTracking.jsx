@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -9,14 +10,9 @@ import PatientSearch from "../../components/common/PatientSearch";
 import { formatDateTime, titleCase } from "../../utils/helpers";
 
 const STATUS_FLOW = ["referred", "travel_in_progress", "arrived", "seen", "completed"];
-const NEXT_LABEL = {
-  referred: "Mark travelling",
-  travel_in_progress: "Mark arrived",
-  arrived: "Mark seen",
-  seen: "Mark completed",
-};
 
 export default function ReferralTracking() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [referrals, setReferrals] = useState([]);
   const [facilities, setFacilities] = useState([]);
@@ -28,6 +24,13 @@ export default function ReferralTracking() {
 
   const [patient, setPatient] = useState(null);
   const [form, setForm] = useState({ to_facility_id: "", reason: "", urgency: "routine" });
+
+  const NEXT_LABEL = {
+    referred: t("referrals.nextReferred"),
+    travel_in_progress: t("referrals.nextTravelInProgress"),
+    arrived: t("referrals.nextArrived"),
+    seen: t("referrals.nextSeen"),
+  };
 
   function load() {
     setLoading(true);
@@ -54,7 +57,7 @@ export default function ReferralTracking() {
   }
 
   async function markMissed(referral) {
-    if (!confirm("Mark this referral as missed?")) return;
+    if (!confirm(t("referrals.missedConfirm"))) return;
     await api.patch(`/referrals/${referral.referral_id}/status`, { status: "missed", note: "Marked missed manually" });
     load();
   }
@@ -62,7 +65,7 @@ export default function ReferralTracking() {
   async function handleCreate(e) {
     e.preventDefault();
     if (!patient || !form.to_facility_id || !form.reason.trim()) {
-      setError("Patient, destination facility, and a reason are required.");
+      setError(t("referrals.errorRequired"));
       return;
     }
     setError("");
@@ -80,7 +83,7 @@ export default function ReferralTracking() {
       setForm({ to_facility_id: "", reason: "", urgency: "routine" });
       load();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to create referral.");
+      setError(err.response?.data?.message || t("referrals.errorGeneric"));
     } finally {
       setSaving(false);
     }
@@ -89,16 +92,16 @@ export default function ReferralTracking() {
   return (
     <div>
       <PageHeader
-        title="Referrals"
-        subtitle="Track every patient moving between facility tiers, from referral to completion."
-        action={<Button onClick={() => setShowCreate(true)}>New Referral</Button>}
+        title={t("referrals.title")}
+        subtitle={t("referrals.subtitle")}
+        action={<Button onClick={() => setShowCreate(true)}>{t("referrals.newReferral")}</Button>}
       />
 
       <Tabs
         tabs={[
-          { value: "all", label: "All" },
-          { value: "incoming", label: "Incoming" },
-          { value: "outgoing", label: "Outgoing" },
+          { value: "all", label: t("referrals.tabAll") },
+          { value: "incoming", label: t("referrals.tabIncoming") },
+          { value: "outgoing", label: t("referrals.tabOutgoing") },
         ]}
         active={tab}
         onChange={setTab}
@@ -107,11 +110,10 @@ export default function ReferralTracking() {
       {loading ? (
         <Spinner />
       ) : filtered.length === 0 ? (
-        <EmptyState title="No referrals" description="Nothing to show in this view yet." />
+        <EmptyState title={t("referrals.emptyTitle")} description={t("referrals.emptyDescription")} />
       ) : (
         <div className="space-y-3">
           {filtered.map((r) => {
-            const token = STATUS_FLOW.includes(r.status) ? r.status : r.status;
             const canAdvance = STATUS_FLOW.includes(r.status) && r.status !== "completed";
             return (
               <Card key={r.referral_id} className="p-5" accentClass={r.urgency === "emergency" ? "border-rose-500" : "border-teal-500"}>
@@ -126,13 +128,13 @@ export default function ReferralTracking() {
                   </div>
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     {r.urgency === "emergency" && (
-                      <span className="text-xs font-semibold text-rose-500 uppercase tracking-wide">Emergency</span>
+                      <span className="text-xs font-semibold text-rose-500 uppercase tracking-wide">{t("referrals.emergency")}</span>
                     )}
                     <StatusTag status={r.status} />
                     {canAdvance && (
                       <div className="flex gap-2 mt-1">
                         <Button variant="secondary" onClick={() => advanceStatus(r)}>{NEXT_LABEL[r.status]}</Button>
-                        <Button variant="danger" onClick={() => markMissed(r)}>Missed</Button>
+                        <Button variant="danger" onClick={() => markMissed(r)}>{t("referrals.missed")}</Button>
                       </div>
                     )}
                   </div>
@@ -143,38 +145,38 @@ export default function ReferralTracking() {
         </div>
       )}
 
-      <Modal open={showCreate} onClose={() => setShowCreate(false)} title="New Referral">
+      <Modal open={showCreate} onClose={() => setShowCreate(false)} title={t("referrals.modalTitle")}>
         <form onSubmit={handleCreate}>
           {error && <Banner variant="error">{error}</Banner>}
 
-          <FormField label="Patient" required>
+          <FormField label={t("referrals.patient")} required>
             <PatientSearch selected={patient} onSelect={setPatient} onClear={() => setPatient(null)} />
           </FormField>
 
-          <FormField label="To Facility" required>
+          <FormField label={t("referrals.toFacility")} required>
             <Select value={form.to_facility_id} onChange={(e) => setForm({ ...form, to_facility_id: e.target.value })}>
-              <option value="">Select…</option>
+              <option value="">{t("referrals.selectFacility")}</option>
               {facilities.filter((f) => f.facility_id !== user?.facility_id).map((f) => (
                 <option key={f.facility_id} value={f.facility_id}>{f.name} ({titleCase(f.tier)})</option>
               ))}
             </Select>
           </FormField>
 
-          <FormField label="Reason" required>
-            <Textarea rows={3} value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="Why is this patient being referred?" />
+          <FormField label={t("referrals.reason")} required>
+            <Textarea rows={3} value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder={t("referrals.reasonPlaceholder")} />
           </FormField>
 
-          <FormField label="Urgency">
+          <FormField label={t("referrals.urgency")}>
             <Select value={form.urgency} onChange={(e) => setForm({ ...form, urgency: e.target.value })}>
-              <option value="routine">Routine</option>
-              <option value="urgent">Urgent</option>
-              <option value="emergency">Emergency</option>
+              <option value="routine">{t("referrals.urgencyRoutine")}</option>
+              <option value="urgent">{t("referrals.urgencyUrgent")}</option>
+              <option value="emergency">{t("referrals.urgencyEmergency")}</option>
             </Select>
           </FormField>
 
           <div className="flex justify-end gap-2 mt-6">
-            <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button type="submit" disabled={saving}>{saving ? "Creating…" : "Create Referral"}</Button>
+            <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>{t("referrals.cancel")}</Button>
+            <Button type="submit" disabled={saving}>{saving ? t("referrals.creating") : t("referrals.create")}</Button>
           </div>
         </form>
       </Modal>

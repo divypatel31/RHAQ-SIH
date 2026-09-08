@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { PageHeader, Card, Spinner, EmptyState } from "../../components/common";
 import { formatDate } from "../../utils/helpers";
 
 export default function MyPrescriptions() {
+  const { t } = useTranslation();
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,12 +15,12 @@ export default function MyPrescriptions() {
 
   return (
     <div>
-      <PageHeader title="Prescriptions" subtitle="Medicines prescribed to you by a doctor." />
+      <PageHeader title={t("myPrescriptions.title")} subtitle={t("myPrescriptions.subtitle")} />
 
       {loading ? (
         <Spinner />
       ) : prescriptions.length === 0 ? (
-        <EmptyState title="No prescriptions yet" description="Prescriptions issued during a visit will appear here." />
+        <EmptyState title={t("myPrescriptions.emptyTitle")} description={t("myPrescriptions.emptyDescription")} />
       ) : (
         <div className="space-y-3">
           {prescriptions.map((p) => (
@@ -28,7 +30,7 @@ export default function MyPrescriptions() {
                   <p className="text-sm font-medium text-ink">{p.medicines}</p>
                   {p.notes && <p className="text-xs text-ink/55 mt-1.5">{p.notes}</p>}
                   <p className="text-xs text-ink/40 mt-2">
-                    {p.issued_by_name ? `Dr. ${p.issued_by_name}` : "Facility staff"}
+                    {p.issued_by_name ? `Dr. ${p.issued_by_name}` : t("myPrescriptions.facilityStaffFallback")}
                     {p.facility_name ? ` · ${p.facility_name}` : ""}
                   </p>
                 </div>

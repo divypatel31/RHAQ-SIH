@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { PageHeader, Card, FormField, Input, Select, Button, Banner, Spinner } from "../../components/common";
 
 export default function BookAppointment() {
+  const { t } = useTranslation();
   const [facilities, setFacilities] = useState([]);
   const [loadingFacilities, setLoadingFacilities] = useState(true);
   const [form, setForm] = useState({ facility_id: "", appointment_date: "", is_teleconsult: false });
@@ -17,7 +19,7 @@ export default function BookAppointment() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!form.facility_id || !form.appointment_date) {
-      setError("Please choose a facility and a date.");
+      setError(t("bookAppointment.errorRequired"));
       return;
     }
     setError("");
@@ -31,7 +33,7 @@ export default function BookAppointment() {
       setSuccess(true);
       setForm({ facility_id: "", appointment_date: "", is_teleconsult: false });
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to book appointment.");
+      setError(err.response?.data?.message || t("bookAppointment.errorGeneric"));
     } finally {
       setSubmitting(false);
     }
@@ -39,13 +41,9 @@ export default function BookAppointment() {
 
   return (
     <div>
-      <PageHeader title="Book an Appointment" subtitle="Choose a facility and a date that works for you." />
+      <PageHeader title={t("bookAppointment.title")} subtitle={t("bookAppointment.subtitle")} />
 
-      {success && (
-        <Banner variant="info">
-          Your appointment request has been sent. You can track its status under "My Appointments."
-        </Banner>
-      )}
+      {success && <Banner variant="info">{t("bookAppointment.successBanner")}</Banner>}
       {error && <Banner variant="error">{error}</Banner>}
 
       <Card className="p-6 max-w-lg">
@@ -53,9 +51,9 @@ export default function BookAppointment() {
           <Spinner />
         ) : (
           <form onSubmit={handleSubmit}>
-            <FormField label="Facility" required>
+            <FormField label={t("bookAppointment.facility")} required>
               <Select value={form.facility_id} onChange={(e) => setForm({ ...form, facility_id: e.target.value })}>
-                <option value="">Select a facility…</option>
+                <option value="">{t("bookAppointment.selectFacility")}</option>
                 {facilities.map((f) => (
                   <option key={f.facility_id} value={f.facility_id}>
                     {f.name} ({f.tier.replace(/_/g, " ")})
@@ -64,7 +62,7 @@ export default function BookAppointment() {
               </Select>
             </FormField>
 
-            <FormField label="Preferred Date" required>
+            <FormField label={t("bookAppointment.date")} required>
               <Input
                 type="date"
                 value={form.appointment_date}
@@ -80,11 +78,11 @@ export default function BookAppointment() {
                 onChange={(e) => setForm({ ...form, is_teleconsult: e.target.checked })}
                 className="rounded border-line"
               />
-              This is a teleconsultation (remote), not an in-person visit
+              {t("bookAppointment.teleconsult")}
             </label>
 
             <Button type="submit" disabled={submitting}>
-              {submitting ? "Booking…" : "Book Appointment"}
+              {submitting ? t("bookAppointment.submitting") : t("bookAppointment.submit")}
             </Button>
           </form>
         )}

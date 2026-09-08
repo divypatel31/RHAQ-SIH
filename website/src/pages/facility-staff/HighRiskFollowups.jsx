@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import { PageHeader, Card, StatusTag, Spinner, EmptyState, Button, Tabs } from "../../components/common";
 import { formatDate, titleCase } from "../../utils/helpers";
 
 export default function HighRiskFollowups() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [followups, setFollowups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,21 +27,21 @@ export default function HighRiskFollowups() {
   }
 
   async function handleClose(followup) {
-    if (!confirm("Close this follow-up?")) return;
+    if (!confirm(t("highRisk.closeConfirm"))) return;
     await api.patch(`/high-risk/${followup.followup_id}/close`);
     load();
   }
 
   return (
     <div>
-      <PageHeader title="High-Risk Follow-ups" subtitle="Maternal, child immunization, and chronic-disease patients needing proactive tracking." />
+      <PageHeader title={t("highRisk.title")} subtitle={t("highRisk.subtitle")} />
 
       <Tabs
         tabs={[
-          { value: "", label: "All" },
-          { value: "due", label: "Due" },
-          { value: "overdue", label: "Overdue" },
-          { value: "missed", label: "Missed" },
+          { value: "", label: t("highRisk.tabAll") },
+          { value: "due", label: t("highRisk.tabDue") },
+          { value: "overdue", label: t("highRisk.tabOverdue") },
+          { value: "missed", label: t("highRisk.tabMissed") },
         ]}
         active={tab}
         onChange={setTab}
@@ -48,7 +50,7 @@ export default function HighRiskFollowups() {
       {loading ? (
         <Spinner />
       ) : followups.length === 0 ? (
-        <EmptyState title="No follow-ups" description="No high-risk patients match this filter." />
+        <EmptyState title={t("highRisk.emptyTitle")} description={t("highRisk.emptyDescription")} />
       ) : (
         <div className="space-y-3">
           {followups.map((f) => (
@@ -56,14 +58,14 @@ export default function HighRiskFollowups() {
               <div>
                 <p className="text-sm font-medium text-ink">{f.patient_name}</p>
                 <p className="text-xs text-ink/50 mt-1">{titleCase(f.category)} · {f.condition_label}</p>
-                <p className="text-xs text-ink/35 mt-1">Due {formatDate(f.next_due_date)}</p>
+                <p className="text-xs text-ink/35 mt-1">{t("highRisk.due")} {formatDate(f.next_due_date)}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <StatusTag status={f.status} />
                 {f.status !== "closed" && (
                   <>
-                    <Button variant="secondary" onClick={() => handleLogContact(f)}>Log Contact</Button>
-                    <Button variant="ghost" onClick={() => handleClose(f)}>Close</Button>
+                    <Button variant="secondary" onClick={() => handleLogContact(f)}>{t("highRisk.logContact")}</Button>
+                    <Button variant="ghost" onClick={() => handleClose(f)}>{t("highRisk.close")}</Button>
                   </>
                 )}
               </div>
