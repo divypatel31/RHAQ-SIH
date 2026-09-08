@@ -105,7 +105,7 @@
   },
   "common": {
     "readAloud": "🔊 सुनें",
-    "readAloudError": "आवाज़ में पढ़ने के लिए Bhashini API क्रेडेंशियल चाहिए — asha-app/README.md देखें।",
+    "readAloudFallback": "डिवाइस की आवाज़ इस्तेमाल हुई (Bhashini अभी उपलब्ध नहीं है)।",
     "language": "भाषा"
   }
 }
