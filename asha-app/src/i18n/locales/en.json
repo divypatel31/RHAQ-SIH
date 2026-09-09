@@ -107,5 +107,18 @@
     "readAloud": "🔊 Read aloud",
     "readAloudFallback": "Used device voice (Bhashini unavailable right now).",
     "language": "Language"
+  },
+  "welcome": {
+    "eyebrow": "SMART INDIA HACKATHON 2026 · SIH26133",
+    "headline": "Continuity of care, from sub-centre to district hospital.",
+    "subheadline": "Register patients and create referrals even with zero signal — everything syncs automatically once you're connected.",
+    "feature1Title": "Works fully offline",
+    "feature1Desc": "Register patients and create referrals with no signal at all.",
+    "feature2Title": "Referral completion tracking",
+    "feature2Desc": "Every referral you create is tracked until the patient is actually seen.",
+    "feature3Title": "High-risk follow-up worklist",
+    "feature3Desc": "See which mothers, children, and chronic-disease patients are due for a visit.",
+    "getStarted": "Get Started",
+    "footerNote": "Rural Health Access & Quality Improvement System"
   }
 }
