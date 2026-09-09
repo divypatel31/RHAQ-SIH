@@ -7,23 +7,30 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "backgroundColor": "#0F6E56"
+      "backgroundColor": "#128807"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "dev.rhaq.ashaapp",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#0F6E56"
-      }
+        "backgroundColor": "#128807"
+      },
+      "permissions": [
+        "RECORD_AUDIO",
+        "INTERNET"
+      ]
     },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "dev.rhaq.ashaapp"
     },
-    "plugins": [
-      "expo-status-bar"
-    ]
+    "extra": {
+      "eas": {
+        "projectId": "71c23a96-9021-47fd-9a49-9bfa0e3d3a5c"
+      }
+    }
   }
 }
