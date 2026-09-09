@@ -6,15 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "backgroundColor": "#128807"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "dev.rhaq.ashaapp",
-      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#128807"
       },
@@ -27,6 +23,9 @@
       "supportsTablet": false,
       "bundleIdentifier": "dev.rhaq.ashaapp"
     },
+    "plugins": [
+      "expo-font"
+    ],
     "extra": {
       "eas": {
         "projectId": "71c23a96-9021-47fd-9a49-9bfa0e3d3a5c"
