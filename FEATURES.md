@@ -74,7 +74,7 @@ Legend: **P0** = must work for the demo, **P1** = strengthens the pitch, **P2** 
 
 ---
 
-## Suggested build order (both people working in parallel)
+## Suggested build order 
 
 1. Agree on `API_CONTRACT.md` and `docs/db-schema.md` — do this together before writing code.
 2. Backend: auth + facilities + referrals (P0) — get this deployed somewhere reachable (even a free-tier host) so both apps can hit real endpoints instead of mocks.
