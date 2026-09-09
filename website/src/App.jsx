@@ -5,6 +5,7 @@ import DashboardLayout from "./components/layout/DashboardLayout";
 import { Spinner } from "./components/common";
 
 import Login from "./pages/auth/Login";
+import Landing from "./pages/public/Landing";
 import BookAppointment from "./pages/patient/BookAppointment";
 import MyAppointments from "./pages/patient/MyAppointments";
 import MyPrescriptions from "./pages/patient/MyPrescriptions";
@@ -28,7 +29,7 @@ function ProtectedRoute({ children, allowedRoles }) {
 function HomeRedirect() {
   const { user, loading } = useAuth();
   if (loading) return <div className="min-h-screen flex items-center justify-center"><Spinner /></div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Landing />;
   return <Navigate to={user.role === "patient" ? "/patient/book-appointment" : "/staff/referrals"} replace />;
 }
 

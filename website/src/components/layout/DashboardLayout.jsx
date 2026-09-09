@@ -51,7 +51,7 @@ export default function DashboardLayout() {
               to={item.to}
               className={({ isActive }) =>
                 `block px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                  isActive ? "bg-teal-50 text-teal-700" : "text-ink/60 hover:bg-ink/[0.03] hover:text-ink"
+                  isActive ? "bg-brand-50 text-brand-600" : "text-ink/60 hover:bg-ink/[0.03] hover:text-ink"
                 }`
               }
             >

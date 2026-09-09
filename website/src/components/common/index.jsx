@@ -16,7 +16,7 @@ export function PageHeader({ title, subtitle, action }) {
 export function Spinner({ className = "" }) {
   return (
     <div className={`flex items-center justify-center py-16 ${className}`}>
-      <div className="w-6 h-6 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }
@@ -90,7 +90,8 @@ export function StatCard({ label, value, sub }) {
 export function Button({ children, variant = "primary", className = "", ...props }) {
   const base = "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
   const variants = {
-    primary: "bg-teal-500 text-white hover:bg-teal-600",
+    primary: "bg-brand-500 text-white hover:bg-brand-600",
+    accent: "bg-saffron-500 text-white hover:bg-saffron-600",
     secondary: "bg-white text-ink border border-line hover:border-ink/30",
     danger: "bg-white text-rose-500 border border-rose-500/30 hover:bg-rose-50",
     ghost: "text-ink/60 hover:text-ink",
@@ -117,7 +118,7 @@ export function FormField({ label, required, children, error }) {
 export function Input(props) {
   return (
     <input
-      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
       {...props}
     />
   );
@@ -126,7 +127,7 @@ export function Input(props) {
 export function Select({ children, ...props }) {
   return (
     <select
-      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink bg-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
       {...props}
     >
       {children}
@@ -137,7 +138,7 @@ export function Select({ children, ...props }) {
 export function Textarea(props) {
   return (
     <textarea
-      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+      className="w-full px-3.5 py-2.5 border border-line rounded-md text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
       {...props}
     />
   );
@@ -145,7 +146,7 @@ export function Textarea(props) {
 
 export function Banner({ children, variant = "info" }) {
   const variants = {
-    info: "bg-teal-50 text-teal-700 border-teal-500",
+    info: "bg-brand-50 text-brand-600 border-brand-500",
     warning: "bg-amber-50 text-amber-700 border-amber-500",
     error: "bg-rose-50 text-rose-700 border-rose-500",
   };
@@ -180,7 +181,7 @@ export function Tabs({ tabs, active, onChange }) {
           key={tab.value}
           onClick={() => onChange(tab.value)}
           className={`pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
-            active === tab.value ? "border-teal-500 text-ink" : "border-transparent text-ink/45 hover:text-ink/70"
+            active === tab.value ? "border-brand-500 text-ink" : "border-transparent text-ink/45 hover:text-ink/70"
           }`}
         >
           {tab.label}
