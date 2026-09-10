@@ -1,7 +1,7 @@
 // asha-app/src/config.js
 
 export const API_BASE_URL =
-  "https://quick-moles-vanish.loca.lt/api";
+  "https://http://10.25.111.11:5000/api";
 
 export const BHASHINI_USER_ID =
   process.env.EXPO_PUBLIC_BHASHINI_USER_ID || "";
